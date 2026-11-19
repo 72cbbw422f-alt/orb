@@ -42,6 +42,13 @@ struct RootTabView: View {
             .tabItem {
                 Label("Inbox", systemImage: "tray")
             }
+
+            NavigationStack {
+                SettingsView()
+            }
+            .tabItem {
+                Label("Settings", systemImage: "slider.horizontal.3")
+            }
         }
         .tint(OrbitTheme.accent)
     }
