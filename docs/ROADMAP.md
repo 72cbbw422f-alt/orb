@@ -1,105 +1,114 @@
 # ORBIT — Roadmap
 
-This is a delivery plan, not a claim that listed features are already implemented. A milestone is complete only after its exit criteria are met.
+This roadmap tracks delivery, not aspirations. A feature is complete only after implementation, tests, failure handling, and API/platform verification where relevant.
 
 ## M0 — Project foundation
-- [x] Confirm product name and repository.
-- [x] Establish product principles and initial scope.
-- [x] Document architecture and integration risks.
-- [x] Add initial SwiftUI app shell.
-- [x] Add XcodeGen project configuration and CI workflow.
-- [x] Add baseline model tests.
-**Exit:** source project is generated in CI; final build/test result is still pending.
+- [x] Product name, repository, scope and principles.
+- [x] SwiftUI app shell and XcodeGen configuration.
+- [x] GitHub Actions build/test and unsigned IPA packaging workflow.
+- [x] Baseline model tests.
+- [ ] Confirm a clean CI build and test run.
+- [ ] Confirm FlareStore signing and installation on a physical device.
 
 ## M1 — Design system and navigation
-- [x] Define Midnight color, spacing, radius, and surface tokens.
-- [x] Build reusable feed cards and community rows.
-- [x] Implement five-tab navigation.
-- [ ] Implement Pearl theme.
-- [ ] Add complete accessibility and Dynamic Type review.
-**Exit:** navigable prototype with consistent visual language and accessibility review.
+- [x] Midnight design tokens and reusable components.
+- [x] Five-tab navigation.
+- [x] Compact, Classic and Comfortable feed density.
+- [ ] Pearl, OLED black and theme manager.
+- [ ] Reorderable tabs and configurable navigation.
+- [ ] Accessibility, Dynamic Type, VoiceOver and reduced-motion review.
 
-## M2 — Feed experience
+## M2 — Feed and discovery
 - [x] Feed models and stable preview fixtures.
-- [x] Home, Popular, and All feed selection.
-- [x] Comfortable, Compact, and Classic card density preferences.
+- [x] Home, Popular and All prototype feeds.
 - [x] Local feed search.
-- [x] Post detail preview.
-- [x] Local persistent bookmark action and Saved library.
-- [ ] Sorting controls beyond the initial feed presets.
-- [ ] Pagination, refresh, skeleton, and network error states.
-- [ ] Post action menu and share sheet.
-**Exit:** complete fixture-backed feed prototype with tests and verified interactions.
+- [x] Community discovery and local follow state.
+- [ ] Full supported feed sorts and time ranges.
+- [ ] Multireddits, favorites and reorderable community list.
+- [ ] Live search for posts, communities, users and comments.
+- [ ] Pull-to-refresh, pagination, scroll restoration and network states.
+- [ ] Jump Bar, jump-to-top and return-to-reading-position.
+- [ ] Gallery/grid feed layout and rich link cards.
 
-## M3 — Authorization and API foundation
-- [ ] Verify current developer registration and API approval requirements.
-- [ ] Register OAuth application only after requirements are understood.
-- [ ] Implement secure supported OAuth flow.
-- [ ] Store credentials in Keychain.
-- [ ] Add API client, rate-limit handling, decoding, and fixtures.
-**Exit:** approved credentials successfully make read-only requests. Blocked until legitimate API access exists.
+## M3 — API, authentication and accounts
+- [ ] Verify current Reddit API registration, approval and policy requirements.
+- [ ] Register supported OAuth application and implement OAuth flow.
+- [ ] Keychain token storage, refresh and revoke/disconnect.
+- [ ] Rate-limit-aware API client, pagination, retries and cancellation.
+- [ ] Multiple accounts and account switcher.
+- [ ] Account-specific state, preferences and drafts.
+**Gate:** no scraping, credential workarounds or API policy evasion. Live integration waits for legitimate access.
 
-## M4 — Post detail and comments
-- [x] Initial post detail screen.
-- [x] Fixture-backed threaded comments with nested replies.
-- [x] Collapse and expand comment threads.
-- [x] Local preview voting and Top/Newest sorting.
-- [x] Local root-comment and nested-reply composition.
-- [ ] Markdown and safe link rendering.
-- [ ] Draft persistence.
-- [ ] Replace preview comments with approved API-backed comments.
-**Exit:** reliable discussion reading and supported reply workflow.
+## M4 — Posts and comments
+- [x] Post detail prototype.
+- [x] Fixture-backed threaded comments, collapse/expand, local vote and reply.
+- [ ] Real post types: text, image, gallery, video, link and polls where supported.
+- [ ] Server-backed vote, save, hide, report, share and submit actions where supported.
+- [ ] Markdown rendering and safe rich links.
+- [ ] Comment sorting, find-in-comments and new-comment highlighting.
+- [ ] Draft persistence and full composer.
+- [ ] Avatars, flair, awards and moderator metadata where available.
+- [ ] Live comment updates only if API support permits.
 
-## M5 — Actions and discovery
-- [x] Local bookmark/save interaction.
-- [x] Local preview upvote interaction.
-- [x] Community discovery search prototype.
-- [x] Community detail screen.
-- [x] Local follow/unfollow state.
-- [ ] Server-backed vote and save actions.
-- [ ] Live community pages and follow actions.
-- [ ] Live search posts and communities.
-- [ ] Search history and filters.
-**Exit:** supported interactions work with server-confirmed state.
+## M5 — Media
+- [ ] Full-screen viewer, zoom, swipe and gallery navigation.
+- [ ] Save/share/copy media and save-all gallery action.
+- [ ] Video playback, scrubbing and GIF autoplay controls.
+- [ ] Picture in Picture where supported.
+- [ ] Inline media previews and external provider fallbacks.
+- [ ] Media cache, data saver and cache controls.
+- [ ] Performance tests for video-heavy feeds.
 
-## M6 — Media and reading tools
-- [ ] Image viewer and zoom.
-- [ ] Gallery navigation.
-- [ ] Video and animated media handling.
-- [x] Local persistent reading history (fixture-backed).
-- [ ] Reading queue.
-- [ ] Offline/cache controls.
-**Exit:** media and personal library handle common failure cases.
+## M6 — Personal library
+- [x] Local persistent bookmarks and Saved view.
+- [x] Local persistent reading history.
+- [ ] Saved categories/folders.
+- [ ] Reading queue / read later.
+- [ ] Hidden posts and communities.
+- [ ] Offline reading and cache retention controls.
+- [ ] Export/import and automatic backups.
+- [ ] History retention and privacy controls.
 
-## M7 — Inbox and notifications
-- [ ] Verify supported inbox/message API capabilities.
-- [ ] Build in-app notification center for supported events.
-- [ ] Evaluate approved push architecture.
-- [ ] Add APNs/backend only if permitted and justified.
-- [ ] Evaluate chat separately; do not assume API parity with inbox.
-**Exit:** only verified and approved capabilities are exposed.
+## M7 — Profiles, communities and power tools
+- [x] Community discovery and detail prototype.
+- [ ] Full profile pages and profile navigation.
+- [ ] Community rules, moderators, related communities and flair search.
+- [ ] Advanced keyword, domain, author, community and flair filters.
+- [ ] Configurable post action menus.
+- [ ] Custom swipe gestures and haptics.
+- [ ] Translation in place.
+- [ ] Optional AI summaries with explicit privacy/provider controls.
 
-## M8 — Personalization and polish
-- [x] Initial reading preferences and haptics setting.
-- [x] Feed vote and bookmark actions respect the haptics preference.
-- [ ] Pearl theme and complete theme switching.
-- [ ] Gestures and haptics implementation.
-- [ ] Feed filters and content controls.
-- [ ] Performance and memory profiling.
-- [ ] Accessibility and reduced-motion review.
-**Exit:** release-quality UX baseline.
+## M8 — Inbox, chat and notifications
+- [ ] Verify current inbox, modern chat and mod-mail API capabilities.
+- [ ] Inbox filters, read/unread state and notification center.
+- [ ] Chat and message drafts only where officially supported.
+- [ ] Evaluate push architecture and APNs requirements.
+- [ ] User-controlled notification preferences.
+**Gate:** do not expose nonfunctional chat or promise client-only push delivery.
 
-## M9 — Stabilization and release
-- [ ] Unit, integration, and UI tests pass.
+## M9 — Widgets and iOS integration
+- [ ] Home Screen widgets.
+- [ ] Lock Screen widgets where supported.
+- [ ] Share extension and Shortcuts integration.
+- [ ] Deep links and share-link handling.
+- [ ] App icon packs and theme backup.
+**Gate:** app extensions require separate targets and must be verified with the chosen signing/distribution method.
+
+## M10 — Stabilization and release
+- [ ] Unit, integration and UI tests pass.
 - [ ] API compliance and privacy review.
-- [ ] Crash and network failure review.
-- [ ] GitHub Actions build validation.
-- [ ] FlareStore signing and device distribution verification.
-- [ ] Release notes and known limitations.
-**Exit:** reproducible build, tested core flows, and valid signing/distribution path.
+- [ ] Crash, offline, rate-limit and media failure review.
+- [ ] Performance, memory and battery profiling.
+- [ ] Accessibility and localization review.
+- [ ] CI produces a verified unsigned IPA artifact.
+- [ ] FlareStore signing and device installation verified.
+- [ ] Release notes, privacy disclosure and known limitations.
 
 ## Status vocabulary
-- **Planned:** in scope, not started.
+- **Planned:** scoped, not implemented.
 - **In progress:** implementation underway.
-- **Blocked:** requires approval, credentials, or another dependency.
-- **Complete:** implemented, tested, and meets exit criteria.
+- **Blocked:** requires approval, credentials, backend or platform capability.
+- **Complete:** implemented, tested and meets exit criteria.
+
+See [APOLLO_FEATURE_AUDIT.md](APOLLO_FEATURE_AUDIT.md) for the full feature catalogue and priority rationale.
