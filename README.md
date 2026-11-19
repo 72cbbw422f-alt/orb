@@ -58,7 +58,7 @@ Live account features depend on current developer/API access requirements and ap
 
 The Xcode project is generated from `project.yml`. See [Build instructions](docs/BUILDING.md).
 
-GitHub Actions builds and tests the iOS Simulator target. FlareStore is the planned signing/sideloading route for physical-device testing. A simulator build is not an installable device IPA; signing and installation must be verified separately on a device.
+GitHub Actions builds and tests the iOS Simulator target. GitHub Actions now packages an unsigned device IPA artifact after build and test pass. Download that artifact from the latest successful Actions run, then use FlareStore to sign and install it on your iPhone. The IPA is not installable until FlareStore completes signing.
 
 ## Project identity
 
