@@ -17,7 +17,7 @@ The first interactive SwiftUI prototype is now in the repository:
 - Comfortable and Compact feed density preferences.
 - Post detail preview screen with threaded sample comments.
 - Collapsible comment branches, Top/Newest sorting, local preview voting, and nested reply composition.
-- Persistent local bookmarks and a Saved screen.
+- Local preview upvoting, persistent local bookmarks, and a Saved screen.
 - Community discovery search, community detail pages, and local follow/unfollow.
 - Stable sample post identifiers so saved items survive app relaunches.
 - XcodeGen project configuration and GitHub Actions build/test workflow.
