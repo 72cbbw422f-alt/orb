@@ -2,6 +2,7 @@ import SwiftUI
 
 struct FeedPostDetailView: View {
     let post: FeedPost
+    @EnvironmentObject private var history: ReadingHistoryStore
 
     var body: some View {
         ZStack {
@@ -38,6 +39,9 @@ struct FeedPostDetailView: View {
         .navigationTitle(post.community)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .onAppear {
+            history.record(post)
+        }
     }
 }
 
@@ -46,4 +50,5 @@ struct FeedPostDetailView: View {
         FeedPostDetailView(post: FeedPreviewData.posts[0])
     }
     .environmentObject(BookmarkStore())
+    .environmentObject(ReadingHistoryStore())
 }
