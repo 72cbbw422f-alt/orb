@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RootTabView: View {
+    @StateObject private var bookmarks = BookmarkStore()
+
     var body: some View {
         TabView {
             NavigationStack {
@@ -11,22 +13,14 @@ struct RootTabView: View {
             }
 
             NavigationStack {
-                PlaceholderView(
-                    title: "Discover",
-                    subtitle: "Find communities and conversations worth your time.",
-                    symbol: "safari"
-                )
+                DiscoverView()
             }
             .tabItem {
                 Label("Discover", systemImage: "safari")
             }
 
             NavigationStack {
-                PlaceholderView(
-                    title: "Saved",
-                    subtitle: "Your reading list will live here.",
-                    symbol: "bookmark"
-                )
+                SavedPostsView()
             }
             .tabItem {
                 Label("Saved", systemImage: "bookmark")
@@ -51,6 +45,7 @@ struct RootTabView: View {
             }
         }
         .tint(OrbitTheme.accent)
+        .environmentObject(bookmarks)
     }
 }
 
@@ -60,11 +55,14 @@ private struct PlaceholderView: View {
     let symbol: String
 
     var body: some View {
-        ContentUnavailableView(
-            title,
-            systemImage: symbol,
-            description: Text(subtitle)
-        )
+        ZStack {
+            OrbitTheme.background.ignoresSafeArea()
+            ContentUnavailableView(
+                title,
+                systemImage: symbol,
+                description: Text(subtitle)
+            )
+        }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.large)
     }
