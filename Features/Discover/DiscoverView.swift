@@ -13,16 +13,21 @@ struct DiscoverView: View {
         CommunityPreview(name: "movies", category: "Film & TV", members: "34.1M", description: "Films, cinema and recommendations.")
     ]
 
-    private var filteredCommunities: [CommunityPreview] {
-        let matches = communities.filter {
+    private var matchingCommunities: [CommunityPreview] {
+        communities.filter {
             searchText.isEmpty ||
             $0.name.localizedCaseInsensitiveContains(searchText) ||
             $0.category.localizedCaseInsensitiveContains(searchText) ||
             $0.description.localizedCaseInsensitiveContains(searchText)
         }
-        return matches.sorted {
-            follows.contains($0.name) && !follows.contains($1.name)
-        }
+    }
+
+    private var followedCommunities: [CommunityPreview] {
+        matchingCommunities.filter { follows.contains($0.name) }
+    }
+
+    private var exploreCommunities: [CommunityPreview] {
+        matchingCommunities.filter { !follows.contains($0.name) }
     }
 
     var body: some View {
@@ -46,14 +51,14 @@ struct DiscoverView: View {
                     .padding(14)
                     .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 14))
 
-                    if !follows.followedNames.isEmpty && searchText.isEmpty {
+                    if !followedCommunities.isEmpty && searchText.isEmpty {
                         Text("YOUR COMMUNITIES")
                             .font(.caption.weight(.bold))
                             .tracking(1)
                             .foregroundStyle(OrbitTheme.secondaryText)
 
                         LazyVStack(spacing: 10) {
-                            ForEach(filteredCommunities.filter { follows.contains($0.name) }) { community in
+                            ForEach(followedCommunities) { community in
                                 CommunityRow(community: community)
                             }
                         }
@@ -64,12 +69,16 @@ struct DiscoverView: View {
                         .tracking(1)
                         .foregroundStyle(OrbitTheme.secondaryText)
 
-                    if filteredCommunities.isEmpty {
+                    if matchingCommunities.isEmpty {
                         ContentUnavailableView.search(text: searchText)
                             .padding(.top, 28)
+                    } else if exploreCommunities.isEmpty && searchText.isEmpty {
+                        Text("You're following every community in this preview. Search for more when live discovery is connected.")
+                            .font(.subheadline)
+                            .foregroundStyle(OrbitTheme.secondaryText)
                     } else {
                         LazyVStack(spacing: 10) {
-                            ForEach(filteredCommunities) { community in
+                            ForEach(searchText.isEmpty ? exploreCommunities : matchingCommunities) { community in
                                 CommunityRow(community: community)
                             }
                         }
