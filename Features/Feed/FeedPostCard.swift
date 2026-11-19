@@ -4,6 +4,7 @@ struct FeedPostCard: View {
     let post: FeedPost
     @EnvironmentObject private var bookmarks: BookmarkStore
     @AppStorage("orbit.feedDensity") private var feedDensity = FeedDensity.comfortable.rawValue
+    @AppStorage("orbit.previewUpvotedPostIDs") private var upvotedPostIDs = ""
 
     private var isCompact: Bool {
         feedDensity == FeedDensity.compact.rawValue
@@ -11,6 +12,10 @@ struct FeedPostCard: View {
 
     private var isSaved: Bool {
         bookmarks.contains(post)
+    }
+
+    private var isUpvoted: Bool {
+        Set(upvotedPostIDs.split(separator: ",").map(String.init)).contains(post.id.uuidString)
     }
 
     var body: some View {
@@ -73,7 +78,15 @@ struct FeedPostCard: View {
 
     private var footer: some View {
         HStack(spacing: 18) {
-            Label(post.score, systemImage: "arrow.up")
+            Button {
+                toggleUpvote()
+            } label: {
+                Label(post.score, systemImage: isUpvoted ? "arrow.up.circle.fill" : "arrow.up.circle")
+                    .foregroundStyle(isUpvoted ? OrbitTheme.accent : OrbitTheme.secondaryText)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isUpvoted ? "Remove preview upvote" : "Upvote preview post")
+
             Label("\(post.commentCount)", systemImage: "bubble.right")
             Label(post.kind.label, systemImage: post.kind.symbol)
             Spacer()
@@ -90,6 +103,16 @@ struct FeedPostCard: View {
         }
         .font(.caption.weight(.medium))
         .foregroundStyle(OrbitTheme.secondaryText)
+    }
+
+    private func toggleUpvote() {
+        var ids = Set(upvotedPostIDs.split(separator: ",").map(String.init))
+        if ids.contains(post.id.uuidString) {
+            ids.remove(post.id.uuidString)
+        } else {
+            ids.insert(post.id.uuidString)
+        }
+        upvotedPostIDs = ids.sorted().joined(separator: ",")
     }
 }
 
