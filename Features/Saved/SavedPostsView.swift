@@ -8,7 +8,7 @@ struct SavedPostsView: View {
     private var visiblePosts: [FeedPost] {
         let postsByID = Dictionary(uniqueKeysWithValues: FeedPreviewData.posts.map { ($0.id, $0) })
         let ids = selectedSection == .saved
-            ? FeedPreviewData.posts.filter { bookmarks.savedIDs.contains($0.id) }.map(\\.id)
+            ? FeedPreviewData.posts.filter { bookmarks.savedIDs.contains($0.id) }.map(\.id)
             : history.viewedIDs
         return ids.compactMap { postsByID[$0] }
     }
