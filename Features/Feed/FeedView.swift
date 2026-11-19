@@ -2,6 +2,8 @@ import SwiftUI
 
 struct FeedView: View {
     @State private var selectedFeed = FeedCategory.home
+    @State private var selectedSort = FeedSort.recommended
+    @State private var selectedKind = FeedKindFilter.all
     @State private var searchText = ""
 
     private var visiblePosts: [FeedPost] {
@@ -15,11 +17,23 @@ struct FeedView: View {
             base = Array(FeedPreviewData.posts.reversed())
         }
 
-        guard !searchText.isEmpty else { return base }
-        return base.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText) ||
-            $0.community.localizedCaseInsensitiveContains(searchText) ||
-            $0.excerpt.localizedCaseInsensitiveContains(searchText)
+        let searched = base.filter { post in
+            let matchesSearch = searchText.isEmpty ||
+                post.title.localizedCaseInsensitiveContains(searchText) ||
+                post.community.localizedCaseInsensitiveContains(searchText) ||
+                post.author.localizedCaseInsensitiveContains(searchText) ||
+                post.excerpt.localizedCaseInsensitiveContains(searchText)
+            let matchesKind = selectedKind == .all || post.kind.rawValue == selectedKind.rawValue
+            return matchesSearch && matchesKind
+        }
+
+        switch selectedSort {
+        case .recommended:
+            return searched
+        case .mostDiscussed:
+            return searched.sorted { $0.commentCount > $1.commentCount }
+        case .title:
+            return searched.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         }
     }
 
@@ -34,7 +48,7 @@ struct FeedView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass")
                             .foregroundStyle(OrbitTheme.secondaryText)
-                        TextField("Search this feed", text: $searchText)
+                        TextField("Search posts, communities, authors", text: $searchText)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                             .foregroundStyle(OrbitTheme.primaryText)
@@ -52,6 +66,8 @@ struct FeedView: View {
 
                     introCard
 
+                    filterControls
+
                     HStack {
                         Text(selectedFeed.sectionTitle)
                             .font(.title3.weight(.bold))
@@ -67,7 +83,7 @@ struct FeedView: View {
                     .padding(.top, 2)
 
                     if visiblePosts.isEmpty {
-                        ContentUnavailableView.search(text: searchText)
+                        ContentUnavailableView.search(text: searchText.isEmpty ? "these filters" : searchText)
                             .padding(.top, 24)
                     } else {
                         LazyVStack(spacing: 12) {
@@ -94,6 +110,51 @@ struct FeedView: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var filterControls: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Label("Filter", systemImage: "line.3.horizontal.decrease")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(OrbitTheme.secondaryText)
+                Spacer()
+                Menu {
+                    Picker("Sort posts", selection: $selectedSort) {
+                        ForEach(FeedSort.allCases) { sort in
+                            Text(sort.title).tag(sort)
+                        }
+                    }
+                } label: {
+                    Label(selectedSort.title, systemImage: "arrow.up.arrow.down")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(OrbitTheme.accent)
+                }
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(FeedKindFilter.allCases) { filter in
+                        Button {
+                            selectedKind = filter
+                        } label: {
+                            Text(filter.title)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(selectedKind == filter ? OrbitTheme.background : OrbitTheme.secondaryText)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(
+                                    selectedKind == filter ? OrbitTheme.accent : OrbitTheme.elevatedSurface,
+                                    in: Capsule()
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+        .padding(14)
+        .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 14))
     }
 
     private var header: some View {
@@ -172,9 +233,36 @@ private enum FeedCategory: String, CaseIterable, Identifiable {
     }
 }
 
-#Preview {
-    NavigationStack {
-        FeedView()
+private enum FeedSort: String, CaseIterable, Identifiable {
+    case recommended
+    case mostDiscussed
+    case title
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .recommended: "Recommended"
+        case .mostDiscussed: "Most discussed"
+        case .title: "Title A–Z"
+        }
     }
-    .environmentObject(BookmarkStore())
+}
+
+private enum FeedKindFilter: String, CaseIterable, Identifiable {
+    case all
+    case discussion
+    case image
+    case link
+    case video
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .all: "All"
+        case .discussion: "Text"
+        case .image: "Images"
+        case .link: "Links"
+        case .video: "Video"
+        }
+    }
 }
