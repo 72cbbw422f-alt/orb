@@ -6,25 +6,31 @@ This is a delivery plan, not a claim that listed features are already implemente
 - [x] Confirm product name and repository.
 - [x] Establish product principles and initial scope.
 - [x] Document architecture and integration risks.
-- [ ] Add initial SwiftUI app shell.
-- [ ] Add CI workflow and baseline tests.
-**Exit:** documented repository structure and app shell builds in CI.
+- [x] Add initial SwiftUI app shell.
+- [x] Add XcodeGen project configuration and CI workflow.
+- [x] Add baseline model tests.
+**Exit:** source project is generated in CI; final build/test result is still pending.
 
 ## M1 — Design system and navigation
-- [ ] Define color, typography, spacing, radius, and icon tokens.
-- [ ] Build reusable cards, rows, buttons, and loading states.
-- [ ] Implement navigation structure.
-- [ ] Implement Midnight and Pearl themes.
-- [ ] Add accessibility and Dynamic Type baseline.
-**Exit:** navigable prototype with consistent visual language.
+- [x] Define Midnight color, spacing, radius, and surface tokens.
+- [x] Build reusable feed cards and community rows.
+- [x] Implement five-tab navigation.
+- [ ] Implement Pearl theme.
+- [ ] Add complete accessibility and Dynamic Type review.
+**Exit:** navigable prototype with consistent visual language and accessibility review.
 
 ## M2 — Feed experience
-- [ ] Feed models and deterministic fixtures.
-- [ ] Home feed layouts: Comfortable, Compact, Classic.
-- [ ] Sorting and feed selection UI.
-- [ ] Pagination, refresh, skeleton, empty, and error states.
+- [x] Feed models and stable preview fixtures.
+- [x] Home, Popular, and All feed selection.
+- [x] Comfortable and Compact card density preferences.
+- [x] Local feed search.
+- [x] Post detail preview.
+- [x] Local persistent bookmark action and Saved screen.
+- [ ] Classic layout as a distinct presentation.
+- [ ] Sorting controls beyond the initial feed presets.
+- [ ] Pagination, refresh, skeleton, and network error states.
 - [ ] Post action menu and share sheet.
-**Exit:** complete fixture-backed feed prototype with tests.
+**Exit:** complete fixture-backed feed prototype with tests and verified interactions.
 
 ## M3 — Authorization and API foundation
 - [ ] Verify current developer registration and API approval requirements.
@@ -35,7 +41,7 @@ This is a delivery plan, not a claim that listed features are already implemente
 **Exit:** approved credentials successfully make read-only requests. Blocked until legitimate API access exists.
 
 ## M4 — Post detail and comments
-- [ ] Post detail.
+- [x] Initial post detail screen.
 - [ ] Threaded comments and collapse behavior.
 - [ ] Markdown and safe link rendering.
 - [ ] Comment sorting where supported.
@@ -43,9 +49,13 @@ This is a delivery plan, not a claim that listed features are already implemente
 **Exit:** reliable discussion reading and supported reply workflow.
 
 ## M5 — Actions and discovery
-- [ ] Vote and save actions.
-- [ ] Community pages and follow actions.
-- [ ] Search posts and communities.
+- [x] Local bookmark/save interaction.
+- [x] Community discovery search prototype.
+- [x] Community detail screen.
+- [x] Local follow/unfollow state.
+- [ ] Server-backed vote and save actions.
+- [ ] Live community pages and follow actions.
+- [ ] Live search posts and communities.
 - [ ] Search history and filters.
 **Exit:** supported interactions work with server-confirmed state.
 
@@ -66,8 +76,9 @@ This is a delivery plan, not a claim that listed features are already implemente
 **Exit:** only verified and approved capabilities are exposed.
 
 ## M8 — Personalization and polish
-- [ ] Theme and reading preferences.
-- [ ] Gestures and haptics.
+- [x] Initial reading preferences and haptics setting.
+- [ ] Pearl theme and complete theme switching.
+- [ ] Gestures and haptics implementation.
 - [ ] Feed filters and content controls.
 - [ ] Performance and memory profiling.
 - [ ] Accessibility and reduced-motion review.
@@ -78,12 +89,12 @@ This is a delivery plan, not a claim that listed features are already implemente
 - [ ] API compliance and privacy review.
 - [ ] Crash and network failure review.
 - [ ] GitHub Actions build validation.
-- [ ] Signing and device distribution plan.
+- [ ] FlareStore signing and device distribution verification.
 - [ ] Release notes and known limitations.
 **Exit:** reproducible build, tested core flows, and valid signing/distribution path.
 
 ## Status vocabulary
 - **Planned:** in scope, not started.
 - **In progress:** implementation underway.
-- **Blocked:** requires approval, credentials, signing, or another dependency.
+- **Blocked:** requires approval, credentials, or another dependency.
 - **Complete:** implemented, tested, and meets exit criteria.
