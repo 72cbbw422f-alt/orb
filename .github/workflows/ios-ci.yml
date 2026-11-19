@@ -10,9 +10,11 @@ on:
 permissions:
   contents: read
 
+# Keep one active run per branch. A newer pending run replaces an older pending
+# run, but does not cancel a build that is already executing.
 concurrency:
   group: ios-ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-test:
