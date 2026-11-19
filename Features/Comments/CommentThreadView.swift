@@ -278,8 +278,10 @@ private struct CommentRow: View {
                 if !comment.replies.isEmpty {
                     VStack(spacing: 0) {
                         ForEach(comment.replies) { reply in
-                            CommentRow(comment: reply, depth: depth + 1, onReply: onReply)
-                                .padding(.top, 12)
+                            AnyView(
+                                CommentRow(comment: reply, depth: depth + 1, onReply: onReply)
+                                    .padding(.top, 12)
+                            )
                         }
                     }
                     .padding(.leading, 13)
