@@ -1,9 +1,10 @@
 import Foundation
 
 enum FeedPreviewData {
-    /// Clearly synthetic content used only to develop and preview the interface.
+    /// Clearly synthetic content with stable IDs so local bookmarks survive relaunches.
     static let posts: [FeedPost] = [
         FeedPost(
+            id: UUID(uuidString: "A1000000-0000-4000-8000-000000000001")!,
             community: "r/ios",
             author: "preview_author",
             age: "12 min",
@@ -14,6 +15,7 @@ enum FeedPreviewData {
             kind: .discussion
         ),
         FeedPost(
+            id: UUID(uuidString: "A1000000-0000-4000-8000-000000000002")!,
             community: "r/technology",
             author: "preview_author",
             age: "38 min",
@@ -24,6 +26,7 @@ enum FeedPreviewData {
             kind: .link
         ),
         FeedPost(
+            id: UUID(uuidString: "A1000000-0000-4000-8000-000000000003")!,
             community: "r/design",
             author: "preview_author",
             age: "1 hr",
