@@ -42,10 +42,13 @@ This is a delivery plan, not a claim that listed features are already implemente
 
 ## M4 — Post detail and comments
 - [x] Initial post detail screen.
-- [ ] Threaded comments and collapse behavior.
+- [x] Fixture-backed threaded comments with nested replies.
+- [x] Collapse and expand comment threads.
+- [x] Local preview voting and Top/Newest sorting.
+- [x] Local root-comment and nested-reply composition.
 - [ ] Markdown and safe link rendering.
-- [ ] Comment sorting where supported.
-- [ ] Reply composition and draft persistence.
+- [ ] Draft persistence.
+- [ ] Replace preview comments with approved API-backed comments.
 **Exit:** reliable discussion reading and supported reply workflow.
 
 ## M5 — Actions and discovery
