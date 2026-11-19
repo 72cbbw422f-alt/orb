@@ -23,6 +23,8 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] Home, Popular and All prototype feeds.
 - [x] Local feed search.
 - [x] Community discovery and local follow state.
+- [x] Local prototype sorting: recommended, most discussed and title A–Z.
+- [x] Local post-type filters for text, images, links and video.
 - [ ] Full supported feed sorts and time ranges.
 - [ ] Multireddits, favorites and reorderable community list.
 - [ ] Live search for posts, communities, users and comments.
