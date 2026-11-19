@@ -29,28 +29,10 @@ struct FeedPostDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: OrbitTheme.cardRadius))
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Discussion")
-                                .font(.title3.weight(.bold))
-                                .foregroundStyle(OrbitTheme.primaryText)
-                            Spacer()
-                            Text("NEXT MILESTONE")
-                                .font(.system(size: 9, weight: .bold, design: .rounded))
-                                .tracking(0.8)
-                                .foregroundStyle(OrbitTheme.accent)
-                        }
-
-                        Text("Threaded comments, sorting, collapsing replies and composing responses are in the next discussion milestone.")
-                            .font(.subheadline)
-                            .foregroundStyle(OrbitTheme.secondaryText)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .padding(18)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: OrbitTheme.cardRadius))
+                    CommentThreadView(post: post)
                 }
                 .padding(OrbitTheme.horizontalPadding)
+                .padding(.vertical, 12)
             }
         }
         .navigationTitle(post.community)
