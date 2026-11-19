@@ -2,10 +2,15 @@ import SwiftUI
 
 struct FeedPostCard: View {
     let post: FeedPost
+    @EnvironmentObject private var bookmarks: BookmarkStore
     @AppStorage("orbit.feedDensity") private var feedDensity = FeedDensity.comfortable.rawValue
 
     private var isCompact: Bool {
         feedDensity == FeedDensity.compact.rawValue
+    }
+
+    private var isSaved: Bool {
+        bookmarks.contains(post)
     }
 
     var body: some View {
@@ -72,7 +77,16 @@ struct FeedPostCard: View {
             Label("\(post.commentCount)", systemImage: "bubble.right")
             Label(post.kind.label, systemImage: post.kind.symbol)
             Spacer()
-            Image(systemName: "bookmark")
+
+            Button {
+                bookmarks.toggle(post)
+            } label: {
+                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                    .foregroundStyle(isSaved ? OrbitTheme.accent : OrbitTheme.secondaryText)
+                    .contentTransition(.symbolEffect(.replace))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isSaved ? "Remove saved post" : "Save post")
         }
         .font(.caption.weight(.medium))
         .foregroundStyle(OrbitTheme.secondaryText)
@@ -85,4 +99,5 @@ struct FeedPostCard: View {
         FeedPostCard(post: FeedPreviewData.posts[0])
             .padding()
     }
+    .environmentObject(BookmarkStore())
 }
