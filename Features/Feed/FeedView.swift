@@ -2,15 +2,24 @@ import SwiftUI
 
 struct FeedView: View {
     @State private var selectedFeed = FeedCategory.home
+    @State private var searchText = ""
 
     private var visiblePosts: [FeedPost] {
+        let base: [FeedPost]
         switch selectedFeed {
         case .home:
-            FeedPreviewData.posts
+            base = FeedPreviewData.posts
         case .popular:
-            FeedPreviewData.posts.sorted { $0.commentCount > $1.commentCount }
+            base = FeedPreviewData.posts.sorted { $0.commentCount > $1.commentCount }
         case .all:
-            Array(FeedPreviewData.posts.reversed())
+            base = Array(FeedPreviewData.posts.reversed())
+        }
+
+        guard !searchText.isEmpty else { return base }
+        return base.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText) ||
+            $0.community.localizedCaseInsensitiveContains(searchText) ||
+            $0.excerpt.localizedCaseInsensitiveContains(searchText)
         }
     }
 
@@ -21,6 +30,17 @@ struct FeedView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     header
+
+                    HStack(spacing: 10) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(OrbitTheme.secondaryText)
+                        TextField("Search this feed", text: $searchText)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                            .foregroundStyle(OrbitTheme.primaryText)
+                    }
+                    .padding(13)
+                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 14))
 
                     Picker("Feed", selection: $selectedFeed) {
                         ForEach(FeedCategory.allCases) { category in
@@ -46,14 +66,19 @@ struct FeedView: View {
                     }
                     .padding(.top, 2)
 
-                    LazyVStack(spacing: 12) {
-                        ForEach(visiblePosts) { post in
-                            NavigationLink {
-                                FeedPostDetailView(post: post)
-                            } label: {
-                                FeedPostCard(post: post)
+                    if visiblePosts.isEmpty {
+                        ContentUnavailableView.search(text: searchText)
+                            .padding(.top, 24)
+                    } else {
+                        LazyVStack(spacing: 12) {
+                            ForEach(visiblePosts) { post in
+                                NavigationLink {
+                                    FeedPostDetailView(post: post)
+                                } label: {
+                                    FeedPostCard(post: post)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -151,4 +176,5 @@ private enum FeedCategory: String, CaseIterable, Identifiable {
     NavigationStack {
         FeedView()
     }
+    .environmentObject(BookmarkStore())
 }
