@@ -1,25 +1,27 @@
 import SwiftUI
+import UIKit
 
 struct FeedPostCard: View {
     let post: FeedPost
     @EnvironmentObject private var bookmarks: BookmarkStore
     @AppStorage("orbit.feedDensity") private var feedDensity = FeedDensity.comfortable.rawValue
     @AppStorage("orbit.previewUpvotedPostIDs") private var upvotedPostIDs = ""
+    @AppStorage("orbit.hapticsEnabled") private var hapticsEnabled = true
 
-    private var isCompact: Bool {
-        feedDensity == FeedDensity.compact.rawValue
-    }
-
-    private var isSaved: Bool {
-        bookmarks.contains(post)
-    }
-
+    private var isCompact: Bool { feedDensity == FeedDensity.compact.rawValue }
+    private var isClassic: Bool { feedDensity == FeedDensity.classic.rawValue }
+    private var isSaved: Bool { bookmarks.contains(post) }
     private var isUpvoted: Bool {
         Set(upvotedPostIDs.split(separator: ",").map(String.init)).contains(post.id.uuidString)
     }
+    private var cardSpacing: CGFloat { isCompact ? 8 : (isClassic ? 10 : 14) }
+    private var cardPadding: CGFloat { isCompact ? 11 : (isClassic ? 13 : 16) }
+    private var cardRadius: CGFloat { isClassic ? 12 : OrbitTheme.cardRadius }
+    private var excerptLines: Int { isCompact || isClassic ? 2 : 3 }
+    private var cardSurface: Color { isClassic ? OrbitTheme.elevatedSurface : OrbitTheme.surface }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: isCompact ? 9 : 14) {
+        VStack(alignment: .leading, spacing: cardSpacing) {
             header
 
             Text(post.title)
@@ -30,16 +32,16 @@ struct FeedPostCard: View {
             Text(post.excerpt)
                 .font(.subheadline)
                 .foregroundStyle(OrbitTheme.secondaryText)
-                .lineLimit(isCompact ? 2 : 3)
+                .lineLimit(excerptLines)
                 .fixedSize(horizontal: false, vertical: true)
 
             footer
         }
-        .padding(isCompact ? 12 : 16)
+        .padding(cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: OrbitTheme.cardRadius))
+        .background(cardSurface, in: RoundedRectangle(cornerRadius: cardRadius))
         .overlay {
-            RoundedRectangle(cornerRadius: OrbitTheme.cardRadius)
+            RoundedRectangle(cornerRadius: cardRadius)
                 .stroke(OrbitTheme.separator, lineWidth: 1)
         }
     }
@@ -93,6 +95,7 @@ struct FeedPostCard: View {
 
             Button {
                 bookmarks.toggle(post)
+                playHaptic()
             } label: {
                 Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
                     .foregroundStyle(isSaved ? OrbitTheme.accent : OrbitTheme.secondaryText)
@@ -113,6 +116,12 @@ struct FeedPostCard: View {
             ids.insert(post.id.uuidString)
         }
         upvotedPostIDs = ids.sorted().joined(separator: ",")
+        playHaptic()
+    }
+
+    private func playHaptic() {
+        guard hapticsEnabled else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 }
 
