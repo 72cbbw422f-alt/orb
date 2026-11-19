@@ -3,12 +3,23 @@ import SwiftUI
 struct FeedView: View {
     @State private var selectedFeed = FeedCategory.home
 
+    private var visiblePosts: [FeedPost] {
+        switch selectedFeed {
+        case .home:
+            FeedPreviewData.posts
+        case .popular:
+            FeedPreviewData.posts.sorted { $0.commentCount > $1.commentCount }
+        case .all:
+            Array(FeedPreviewData.posts.reversed())
+        }
+    }
+
     var body: some View {
         ZStack {
             OrbitTheme.background.ignoresSafeArea()
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 20) {
                     header
 
                     Picker("Feed", selection: $selectedFeed) {
@@ -17,29 +28,42 @@ struct FeedView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .tint(OrbitTheme.accent)
 
                     introCard
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Your orbit is taking shape")
-                            .font(.title3.weight(.semibold))
+                    HStack {
+                        Text(selectedFeed.sectionTitle)
+                            .font(.title3.weight(.bold))
                             .foregroundStyle(OrbitTheme.primaryText)
 
-                        Text("The feed will appear here when ORBIT is connected to an approved account. Until then, this is the design foundation — no fake posts or simulated live data.")
-                            .font(.subheadline)
+                        Spacer()
+
+                        Text("SAMPLE CONTENT")
+                            .font(.system(size: 9, weight: .bold, design: .rounded))
+                            .tracking(0.8)
                             .foregroundStyle(OrbitTheme.secondaryText)
-                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding(18)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: OrbitTheme.cardRadius))
+                    .padding(.top, 2)
+
+                    LazyVStack(spacing: 12) {
+                        ForEach(visiblePosts) { post in
+                            FeedPostCard(post: post)
+                        }
+                    }
+
+                    Text("Preview posts are fictional and are only here to shape the interface. Live feeds will be connected after API access is verified.")
+                        .font(.caption2)
+                        .foregroundStyle(OrbitTheme.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 2)
                 }
                 .padding(.horizontal, OrbitTheme.horizontalPadding)
                 .padding(.top, 12)
                 .padding(.bottom, 32)
             }
         }
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     private var header: some View {
@@ -106,6 +130,14 @@ private enum FeedCategory: String, CaseIterable, Identifiable {
         case .home: "Home"
         case .popular: "Popular"
         case .all: "All"
+        }
+    }
+
+    var sectionTitle: String {
+        switch self {
+        case .home: "Your feed"
+        case .popular: "Popular now"
+        case .all: "Explore all"
         }
     }
 }
