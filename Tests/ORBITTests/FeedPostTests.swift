@@ -15,4 +15,15 @@ final class FeedPostTests: XCTestCase {
         XCTAssertEqual(Set(posts.map(\.id)).count, posts.count)
         XCTAssertTrue(posts.allSatisfy { !$0.title.isEmpty })
     }
+
+    func testPreviewPostIdentifiersRemainStable() {
+        XCTAssertEqual(
+            FeedPreviewData.posts.map(\.id.uuidString),
+            [
+                "A1000000-0000-4000-8000-000000000001",
+                "A1000000-0000-4000-8000-000000000002",
+                "A1000000-0000-4000-8000-000000000003"
+            ]
+        )
+    }
 }
