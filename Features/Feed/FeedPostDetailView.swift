@@ -35,13 +35,13 @@ struct FeedPostDetailView: View {
                                 .font(.title3.weight(.bold))
                                 .foregroundStyle(OrbitTheme.primaryText)
                             Spacer()
-                            Text("COMING NEXT")
+                            Text("NEXT MILESTONE")
                                 .font(.system(size: 9, weight: .bold, design: .rounded))
                                 .tracking(0.8)
                                 .foregroundStyle(OrbitTheme.accent)
                         }
 
-                        Text("Threaded comments, sorting, collapsing replies and composing responses will be added in the discussion milestone.")
+                        Text("Threaded comments, sorting, collapsing replies and composing responses are in the next discussion milestone.")
                             .font(.subheadline)
                             .foregroundStyle(OrbitTheme.secondaryText)
                             .fixedSize(horizontal: false, vertical: true)
@@ -63,4 +63,5 @@ struct FeedPostDetailView: View {
     NavigationStack {
         FeedPostDetailView(post: FeedPreviewData.posts[0])
     }
+    .environmentObject(BookmarkStore())
 }
