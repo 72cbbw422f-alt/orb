@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootTabView: View {
     @StateObject private var bookmarks = BookmarkStore()
+    @StateObject private var followedCommunities = CommunityFollowStore()
 
     var body: some View {
         TabView {
@@ -46,6 +47,7 @@ struct RootTabView: View {
         }
         .tint(OrbitTheme.accent)
         .environmentObject(bookmarks)
+        .environmentObject(followedCommunities)
     }
 }
 
