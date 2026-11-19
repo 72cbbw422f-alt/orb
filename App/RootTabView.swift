@@ -3,6 +3,7 @@ import SwiftUI
 struct RootTabView: View {
     @StateObject private var bookmarks = BookmarkStore()
     @StateObject private var followedCommunities = CommunityFollowStore()
+    @StateObject private var readingHistory = ReadingHistoryStore()
 
     var body: some View {
         TabView {
@@ -24,7 +25,7 @@ struct RootTabView: View {
                 SavedPostsView()
             }
             .tabItem {
-                Label("Saved", systemImage: "bookmark")
+                Label("Library", systemImage: "books.vertical")
             }
 
             NavigationStack {
@@ -48,6 +49,7 @@ struct RootTabView: View {
         .tint(OrbitTheme.accent)
         .environmentObject(bookmarks)
         .environmentObject(followedCommunities)
+        .environmentObject(readingHistory)
     }
 }
 
