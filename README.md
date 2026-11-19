@@ -15,7 +15,8 @@ The first interactive SwiftUI prototype is now in the repository:
 - Home, Popular, and All sample feed modes.
 - Local feed search across post titles, communities, and excerpts.
 - Comfortable and Compact feed density preferences.
-- Post detail preview screen.
+- Post detail preview screen with threaded sample comments.
+- Collapsible comment branches, Top/Newest sorting, local preview voting, and nested reply composition.
 - Persistent local bookmarks and a Saved screen.
 - Community discovery search, community detail pages, and local follow/unfollow.
 - Stable sample post identifiers so saved items survive app relaunches.
