@@ -48,7 +48,12 @@ struct FeedView: View {
 
                     LazyVStack(spacing: 12) {
                         ForEach(visiblePosts) { post in
-                            FeedPostCard(post: post)
+                            NavigationLink {
+                                FeedPostDetailView(post: post)
+                            } label: {
+                                FeedPostCard(post: post)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
