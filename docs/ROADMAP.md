@@ -26,7 +26,7 @@ This is a delivery plan, not a claim that listed features are already implemente
 - [x] Local feed search.
 - [x] Post detail preview.
 - [x] Local persistent bookmark action and Saved screen.
-- [ ] Classic layout as a distinct presentation.
+- [x] Classic layout as a distinct presentation.
 - [ ] Sorting controls beyond the initial feed presets.
 - [ ] Pagination, refresh, skeleton, and network error states.
 - [ ] Post action menu and share sheet.
@@ -81,6 +81,7 @@ This is a delivery plan, not a claim that listed features are already implemente
 
 ## M8 — Personalization and polish
 - [x] Initial reading preferences and haptics setting.
+- [x] Feed vote and bookmark actions respect the haptics preference.
 - [ ] Pearl theme and complete theme switching.
 - [ ] Gestures and haptics implementation.
 - [ ] Feed filters and content controls.
