@@ -2,9 +2,14 @@ import SwiftUI
 
 struct FeedPostCard: View {
     let post: FeedPost
+    @AppStorage("orbit.feedDensity") private var feedDensity = FeedDensity.comfortable.rawValue
+
+    private var isCompact: Bool {
+        feedDensity == FeedDensity.compact.rawValue
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: isCompact ? 9 : 14) {
             header
 
             Text(post.title)
@@ -15,12 +20,12 @@ struct FeedPostCard: View {
             Text(post.excerpt)
                 .font(.subheadline)
                 .foregroundStyle(OrbitTheme.secondaryText)
-                .lineLimit(3)
+                .lineLimit(isCompact ? 2 : 3)
                 .fixedSize(horizontal: false, vertical: true)
 
             footer
         }
-        .padding(16)
+        .padding(isCompact ? 12 : 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: OrbitTheme.cardRadius))
         .overlay {
