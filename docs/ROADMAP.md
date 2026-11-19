@@ -22,11 +22,10 @@ This is a delivery plan, not a claim that listed features are already implemente
 ## M2 — Feed experience
 - [x] Feed models and stable preview fixtures.
 - [x] Home, Popular, and All feed selection.
-- [x] Comfortable and Compact card density preferences.
+- [x] Comfortable, Compact, and Classic card density preferences.
 - [x] Local feed search.
 - [x] Post detail preview.
-- [x] Local persistent bookmark action and Saved screen.
-- [x] Classic layout as a distinct presentation.
+- [x] Local persistent bookmark action and Saved library.
 - [ ] Sorting controls beyond the initial feed presets.
 - [ ] Pagination, refresh, skeleton, and network error states.
 - [ ] Post action menu and share sheet.
@@ -67,7 +66,8 @@ This is a delivery plan, not a claim that listed features are already implemente
 - [ ] Image viewer and zoom.
 - [ ] Gallery navigation.
 - [ ] Video and animated media handling.
-- [ ] Reading queue and history.
+- [x] Local persistent reading history (fixture-backed).
+- [ ] Reading queue.
 - [ ] Offline/cache controls.
 **Exit:** media and personal library handle common failure cases.
 
