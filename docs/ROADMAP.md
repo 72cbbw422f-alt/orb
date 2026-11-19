@@ -53,6 +53,7 @@ This is a delivery plan, not a claim that listed features are already implemente
 
 ## M5 — Actions and discovery
 - [x] Local bookmark/save interaction.
+- [x] Local preview upvote interaction.
 - [x] Community discovery search prototype.
 - [x] Community detail screen.
 - [x] Local follow/unfollow state.
