@@ -19,7 +19,7 @@ final class ReadingHistoryStore: ObservableObject {
         if viewedIDs.count > limit {
             viewedIDs = Array(viewedIDs.prefix(limit))
         }
-        UserDefaults.standard.set(viewedIDs.map(\\.uuidString), forKey: storageKey)
+        UserDefaults.standard.set(viewedIDs.map(\.uuidString), forKey: storageKey)
     }
 
     func clear() {
