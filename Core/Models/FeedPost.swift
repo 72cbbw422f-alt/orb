@@ -34,7 +34,7 @@ struct FeedPost: Identifiable, Equatable {
     }
 }
 
-enum PostKind: String, CaseIterable {
+enum PostKind: String, CaseIterable, Equatable {
     case discussion
     case image
     case link
