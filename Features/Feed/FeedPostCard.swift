@@ -88,6 +88,7 @@ struct FeedPostCard: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(isUpvoted ? "Remove preview upvote" : "Upvote preview post")
+            .accessibilityValue(isUpvoted ? "Upvoted" : "Not upvoted")
 
             Label("\(post.commentCount)", systemImage: "bubble.right")
             Label(post.kind.label, systemImage: post.kind.symbol)
@@ -103,6 +104,7 @@ struct FeedPostCard: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(isSaved ? "Remove saved post" : "Save post")
+            .accessibilityValue(isSaved ? "Saved" : "Not saved")
         }
         .font(.caption.weight(.medium))
         .foregroundStyle(OrbitTheme.secondaryText)

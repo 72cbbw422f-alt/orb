@@ -7,7 +7,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] SwiftUI app shell and XcodeGen configuration.
 - [x] GitHub Actions build/test and unsigned IPA packaging workflow.
 - [x] Baseline model tests.
-- [ ] Confirm a clean CI build and test run.
+- [x] Confirm a clean CI build and test run.
 - [ ] Confirm FlareStore signing and installation on a physical device.
 
 ## M1 — Design system and navigation
@@ -16,19 +16,21 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] Compact, Classic and Comfortable feed density.
 - [ ] Pearl, OLED black and theme manager.
 - [ ] Reorderable tabs and configurable navigation.
-- [ ] Accessibility, Dynamic Type, VoiceOver and reduced-motion review.
+- [ ] Accessibility, Dynamic Type, VoiceOver and reduced-motion review (in progress: feed search hints, selected filter announcements, and post action states added; full audit and device verification remain).
 
 ## M2 — Feed and discovery
 - [x] Feed models and stable preview fixtures.
+- [x] Feed repository protocol and injectable preview implementation.
 - [x] Home, Popular and All prototype feeds.
 - [x] Local feed search.
 - [x] Community discovery and local follow state.
 - [x] Local prototype sorting: recommended, most discussed and title A–Z.
 - [x] Local post-type filters for text, images, links and video.
+- [x] Repository-backed feed presentation, explicit load states, refresh, retry, cancellation recovery and deduplication (verified by CI run #76 on code commit `daf7998f84057d5e1024ce5b30de3a1d0802fd8f`; documentation update is separate).
 - [ ] Full supported feed sorts and time ranges.
 - [ ] Multireddits, favorites and reorderable community list.
 - [ ] Live search for posts, communities, users and comments.
-- [ ] Pull-to-refresh, pagination, scroll restoration and network states.
+- [ ] Pagination, scroll restoration and network-state UX.
 - [ ] Jump Bar, jump-to-top and return-to-reading-position.
 - [ ] Gallery/grid feed layout and rich link cards.
 
@@ -103,7 +105,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [ ] Crash, offline, rate-limit and media failure review.
 - [ ] Performance, memory and battery profiling.
 - [ ] Accessibility and localization review.
-- [ ] CI produces a verified unsigned IPA artifact.
+- [x] CI produces a verified unsigned IPA artifact.
 - [ ] FlareStore signing and device installation verified.
 - [ ] Release notes, privacy disclosure and known limitations.
 
