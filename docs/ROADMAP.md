@@ -26,7 +26,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] Community discovery and local follow state.
 - [x] Local prototype sorting: recommended, most discussed and title A–Z.
 - [x] Local post-type filters for text, images, links and video.
-- [x] Repository-backed feed presentation, explicit load states, refresh, retry, cancellation recovery and deduplication (verified by CI run #72 on the current feature branch head).
+- [x] Repository-backed feed presentation, explicit load states, refresh, retry, cancellation recovery and deduplication (verified by CI run #76 on code commit `daf7998f84057d5e1024ce5b30de3a1d0802fd8f`; documentation update is separate).
 - [ ] Full supported feed sorts and time ranges.
 - [ ] Multireddits, favorites and reorderable community list.
 - [ ] Live search for posts, communities, users and comments.
