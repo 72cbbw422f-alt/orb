@@ -7,34 +7,12 @@ struct FeedView: View {
     @State private var searchText = ""
 
     private var visiblePosts: [FeedPost] {
-        let base: [FeedPost]
-        switch selectedFeed {
-        case .home:
-            base = FeedPreviewData.posts
-        case .popular:
-            base = FeedPreviewData.posts.sorted { $0.commentCount > $1.commentCount }
-        case .all:
-            base = Array(FeedPreviewData.posts.reversed())
-        }
-
-        let searched = base.filter { post in
-            let matchesSearch = searchText.isEmpty ||
-                post.title.localizedCaseInsensitiveContains(searchText) ||
-                post.community.localizedCaseInsensitiveContains(searchText) ||
-                post.author.localizedCaseInsensitiveContains(searchText) ||
-                post.excerpt.localizedCaseInsensitiveContains(searchText)
-            let matchesKind = selectedKind == .all || post.kind.rawValue == selectedKind.rawValue
-            return matchesSearch && matchesKind
-        }
-
-        switch selectedSort {
-        case .recommended:
-            return searched
-        case .mostDiscussed:
-            return searched.sorted { $0.commentCount > $1.commentCount }
-        case .title:
-            return searched.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
-        }
+        FeedQuery(
+            scope: selectedFeed,
+            sort: selectedSort,
+            kind: selectedKind,
+            searchText: searchText
+        ).apply(to: FeedPreviewData.posts)
     }
 
     var body: some View {
@@ -209,60 +187,3 @@ struct FeedView: View {
     }
 }
 
-private enum FeedCategory: String, CaseIterable, Identifiable {
-    case home
-    case popular
-    case all
-
-    var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .home: "Home"
-        case .popular: "Popular"
-        case .all: "All"
-        }
-    }
-
-    var sectionTitle: String {
-        switch self {
-        case .home: "Your feed"
-        case .popular: "Popular now"
-        case .all: "Explore all"
-        }
-    }
-}
-
-private enum FeedSort: String, CaseIterable, Identifiable {
-    case recommended
-    case mostDiscussed
-    case title
-
-    var id: String { rawValue }
-    var title: String {
-        switch self {
-        case .recommended: "Recommended"
-        case .mostDiscussed: "Most discussed"
-        case .title: "Title A–Z"
-        }
-    }
-}
-
-private enum FeedKindFilter: String, CaseIterable, Identifiable {
-    case all
-    case discussion
-    case image
-    case link
-    case video
-
-    var id: String { rawValue }
-    var title: String {
-        switch self {
-        case .all: "All"
-        case .discussion: "Text"
-        case .image: "Images"
-        case .link: "Links"
-        case .video: "Video"
-        }
-    }
-}
