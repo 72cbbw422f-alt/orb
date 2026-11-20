@@ -89,3 +89,7 @@ Represent screen states explicitly: idle, loading, loaded, empty, refreshing, an
 
 ## CI and distribution
 GitHub Actions macOS runners can compile and test the iOS project. A successful simulator build or archive is not a signed, installable IPA. Device installation requires valid signing, provisioning, and distribution configuration. CI must not report a signed release if signing was skipped.
+
+
+## Feed query boundary
+Feed scope selection, local search, post-type filtering, and deterministic sorting are implemented as the pure `FeedQuery` value in `Core/Models/FeedQuery.swift`. SwiftUI owns only the current selection state; it passes that state to the query and renders the returned posts. This keeps fixture-backed behavior testable without introducing network dependencies. When live repositories arrive, this query can remain the local presentation/query layer while server-side sorting and filtering are selected only for supported API capabilities.
