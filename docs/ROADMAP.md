@@ -20,16 +20,17 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 
 ## M2 — Feed and discovery
 - [x] Feed models and stable preview fixtures.
-- [x] Feed repository protocol and injectable preview implementation (contract only; feed UI wiring remains pending).
+- [x] Feed repository protocol and injectable preview implementation.
 - [x] Home, Popular and All prototype feeds.
 - [x] Local feed search.
 - [x] Community discovery and local follow state.
 - [x] Local prototype sorting: recommended, most discussed and title A–Z.
 - [x] Local post-type filters for text, images, links and video.
+- [ ] Repository-backed feed presentation, explicit load states, refresh, retry and deduplication (implementation on feature branch; CI verification pending).
 - [ ] Full supported feed sorts and time ranges.
 - [ ] Multireddits, favorites and reorderable community list.
 - [ ] Live search for posts, communities, users and comments.
-- [ ] Pull-to-refresh, pagination, scroll restoration and network states.
+- [ ] Pagination, scroll restoration and network-state UX.
 - [ ] Jump Bar, jump-to-top and return-to-reading-position.
 - [ ] Gallery/grid feed layout and rich link cards.
 
