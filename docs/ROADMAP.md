@@ -16,7 +16,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] Compact, Classic and Comfortable feed density.
 - [ ] Pearl, OLED black and theme manager.
 - [ ] Reorderable tabs and configurable navigation.
-- [ ] Accessibility, Dynamic Type, VoiceOver and reduced-motion review.
+- [ ] Accessibility, Dynamic Type, VoiceOver and reduced-motion review (in progress: feed search hints, selected filter announcements, and post action states added; full audit and device verification remain).
 
 ## M2 — Feed and discovery
 - [x] Feed models and stable preview fixtures.
