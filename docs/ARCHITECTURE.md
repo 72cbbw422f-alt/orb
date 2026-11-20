@@ -78,7 +78,7 @@ Isolate integration behind protocols such as AuthenticationProviding, FeedReposi
 Use SwiftData for preferences, reading queue, history, and suitable local records. Cache only in ways allowed by upstream terms and response headers. Separate user-owned data from remote cache. Provide clear-cache and history controls.
 
 ## State management
-Represent screen states explicitly. The feed currently uses idle, loading, loaded, empty, and failed states; refresh progress is tracked separately so existing content remains visible while a refresh is in progress. A failed refresh preserves already loaded posts and exposes a retry path. Optimistic updates require a defined rollback. Server-confirmed state is authoritative.
+Represent screen states explicitly. The feed currently uses idle, loading, loaded, empty, and failed states; refresh progress is tracked separately so existing content remains visible while a refresh is in progress. A failed refresh preserves already loaded posts and exposes a retry path. A cancelled initial load returns to idle so the next appearance can retry; cancelling a refresh restores the loaded state and retains the existing posts. Stale request results are ignored. Optimistic updates require a defined rollback. Server-confirmed state is authoritative.
 
 ## Testing
 - Unit tests for models, decoding, pagination, sorting, and view-model transitions.
