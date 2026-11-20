@@ -7,7 +7,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [x] SwiftUI app shell and XcodeGen configuration.
 - [x] GitHub Actions build/test and unsigned IPA packaging workflow.
 - [x] Baseline model tests.
-- [ ] Confirm a clean CI build and test run.
+- [x] Confirm a clean CI build and test run.
 - [ ] Confirm FlareStore signing and installation on a physical device.
 
 ## M1 — Design system and navigation
@@ -20,6 +20,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 
 ## M2 — Feed and discovery
 - [x] Feed models and stable preview fixtures.
+- [x] Feed repository protocol and injectable preview implementation (contract only; feed UI wiring remains pending).
 - [x] Home, Popular and All prototype feeds.
 - [x] Local feed search.
 - [x] Community discovery and local follow state.
@@ -103,7 +104,7 @@ This roadmap tracks delivery, not aspirations. A feature is complete only after 
 - [ ] Crash, offline, rate-limit and media failure review.
 - [ ] Performance, memory and battery profiling.
 - [ ] Accessibility and localization review.
-- [ ] CI produces a verified unsigned IPA artifact.
+- [x] CI produces a verified unsigned IPA artifact.
 - [ ] FlareStore signing and device installation verified.
 - [ ] Release notes, privacy disclosure and known limitations.
 
