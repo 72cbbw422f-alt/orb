@@ -97,3 +97,7 @@ Feed scope selection, local search, post-type filtering, and deterministic sorti
 
 ## HTTP transport boundary
 `Core/Networking/HTTPClient.swift` provides an injectable URLSession-backed JSON transport. It accepts a prepared URLRequest and decodes a typed Decodable response. `HTTPClientError` distinguishes transport failures, invalid responses, non-2xx HTTP statuses (including rate-limit responses such as 429), and decoding failures. The transport does not own credentials, Reddit-specific endpoints, retry policy, or OAuth; those responsibilities remain in dedicated API/authentication layers.
+
+
+## Feed repository boundary
+`Core/Repositories/FeedRepository.swift` defines the asynchronous `FeedRepository` contract. The contract returns domain-level `FeedPost` values and does not expose URLSession, HTTP response types, or API DTOs. `Features/Feed/PreviewFeedRepository.swift` is the current fixture-backed implementation and supports dependency injection for deterministic tests. The feed screen is intentionally not wired to this repository in this architecture change; that presentation integration belongs to the feed feature workstream. A future authorized Reddit-backed implementation can satisfy the same contract after API access and endpoint behavior are verified.
