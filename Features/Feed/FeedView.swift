@@ -200,7 +200,7 @@ struct FeedView: View {
                                     in: Capsule()
                                 )
                         }
-                         .buttonStyle(.plain)
+                        .buttonStyle(.plain)
                         .accessibilityAddTraits(selectedKind == filter ? .isSelected : [])
                     }
                 }
