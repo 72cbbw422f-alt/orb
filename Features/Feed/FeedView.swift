@@ -31,7 +31,6 @@ struct FeedView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     header
-
                     searchField
 
                     Picker("Feed", selection: $selectedFeed) {
@@ -85,9 +84,7 @@ struct FeedView: View {
             Text(selectedFeed.sectionTitle)
                 .font(.title3.weight(.bold))
                 .foregroundStyle(OrbitTheme.primaryText)
-
             Spacer()
-
             Text("PREVIEW SOURCE")
                 .font(.system(size: 9, weight: .bold, design: .rounded))
                 .tracking(0.8)
@@ -130,12 +127,20 @@ struct FeedView: View {
 
         case .loaded, .failed:
             if case .failed(let message) = viewModel.state {
-                Label(message, systemImage: "exclamationmark.triangle")
-                    .font(.caption)
-                    .foregroundStyle(OrbitTheme.secondaryText)
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 12))
+                HStack(spacing: 10) {
+                    Label(message, systemImage: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundStyle(OrbitTheme.secondaryText)
+                    Spacer(minLength: 4)
+                    Button("Retry") {
+                        Task { await viewModel.refresh() }
+                    }
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(OrbitTheme.accent)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 12))
             }
 
             if visiblePosts.isEmpty {
@@ -208,14 +213,11 @@ struct FeedView: View {
                     .font(.system(size: 28, weight: .black, design: .rounded))
                     .tracking(2.4)
                     .foregroundStyle(OrbitTheme.primaryText)
-
                 Text("The internet, in your orbit.")
                     .font(.caption)
                     .foregroundStyle(OrbitTheme.secondaryText)
             }
-
             Spacer()
-
             Image(systemName: "circle.hexagongrid.fill")
                 .font(.system(size: 25, weight: .medium))
                 .foregroundStyle(OrbitTheme.accent)
@@ -237,7 +239,6 @@ struct FeedView: View {
                 Text("A calmer way to keep up")
                     .font(.headline)
                     .foregroundStyle(OrbitTheme.primaryText)
-
                 Text("Your communities. Your pace. Your rules.")
                     .font(.caption)
                     .foregroundStyle(OrbitTheme.secondaryText)
