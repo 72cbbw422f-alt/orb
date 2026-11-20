@@ -58,14 +58,29 @@ final class FeedViewModel: ObservableObject {
 
         do {
             let fetchedPosts = try await repository.fetchPosts()
-            guard activeRequestID == requestID, !Task.isCancelled else { return }
+            guard activeRequestID == requestID else { return }
+            guard !Task.isCancelled else {
+                restoreStableStateAfterCancellation()
+                return
+            }
 
             var seenIDs = Set<FeedPost.ID>()
             posts = fetchedPosts.filter { seenIDs.insert($0.id).inserted }
             state = posts.isEmpty ? .empty : .loaded
+        } catch is CancellationError {
+            guard activeRequestID == requestID else { return }
+            restoreStableStateAfterCancellation()
         } catch {
             guard activeRequestID == requestID, !Task.isCancelled else { return }
             state = .failed(error.localizedDescription)
+        }
+    }
+
+    private func restoreStableStateAfterCancellation() {
+        if posts.isEmpty {
+            state = .idle
+        } else {
+            state = .loaded
         }
     }
 }
