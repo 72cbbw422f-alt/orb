@@ -1,18 +1,27 @@
 import SwiftUI
 
 struct FeedView: View {
+    @StateObject private var viewModel: FeedViewModel
     @State private var selectedFeed = FeedCategory.home
     @State private var selectedSort = FeedSort.recommended
     @State private var selectedKind = FeedKindFilter.all
     @State private var searchText = ""
 
-    private var visiblePosts: [FeedPost] {
+    init(repository: any FeedRepository = PreviewFeedRepository()) {
+        _viewModel = StateObject(wrappedValue: FeedViewModel(repository: repository))
+    }
+
+    private var feedQuery: FeedQuery {
         FeedQuery(
             scope: selectedFeed,
             sort: selectedSort,
             kind: selectedKind,
             searchText: searchText
-        ).apply(to: FeedPreviewData.posts)
+        )
+    }
+
+    private var visiblePosts: [FeedPost] {
+        viewModel.visiblePosts(for: feedQuery)
     }
 
     var body: some View {
@@ -23,16 +32,7 @@ struct FeedView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     header
 
-                    HStack(spacing: 10) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundStyle(OrbitTheme.secondaryText)
-                        TextField("Search posts, communities, authors", text: $searchText)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                            .foregroundStyle(OrbitTheme.primaryText)
-                    }
-                    .padding(13)
-                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 14))
+                    searchField
 
                     Picker("Feed", selection: $selectedFeed) {
                         ForEach(FeedCategory.allCases) { category in
@@ -43,38 +43,9 @@ struct FeedView: View {
                     .tint(OrbitTheme.accent)
 
                     introCard
-
                     filterControls
-
-                    HStack {
-                        Text(selectedFeed.sectionTitle)
-                            .font(.title3.weight(.bold))
-                            .foregroundStyle(OrbitTheme.primaryText)
-
-                        Spacer()
-
-                        Text("SAMPLE CONTENT")
-                            .font(.system(size: 9, weight: .bold, design: .rounded))
-                            .tracking(0.8)
-                            .foregroundStyle(OrbitTheme.secondaryText)
-                    }
-                    .padding(.top, 2)
-
-                    if visiblePosts.isEmpty {
-                        ContentUnavailableView.search(text: searchText.isEmpty ? "these filters" : searchText)
-                            .padding(.top, 24)
-                    } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(visiblePosts) { post in
-                                NavigationLink {
-                                    FeedPostDetailView(post: post)
-                                } label: {
-                                    FeedPostCard(post: post)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    }
+                    feedHeading
+                    feedContent
 
                     Text("Preview posts are fictional and are only here to shape the interface. Live feeds will be connected after API access is verified.")
                         .font(.caption2)
@@ -86,8 +57,103 @@ struct FeedView: View {
                 .padding(.top, 12)
                 .padding(.bottom, 32)
             }
+            .refreshable {
+                await viewModel.refresh()
+            }
+        }
+        .task {
+            await viewModel.loadIfNeeded()
         }
         .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(OrbitTheme.secondaryText)
+            TextField("Search posts, communities, authors", text: $searchText)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .foregroundStyle(OrbitTheme.primaryText)
+        }
+        .padding(13)
+        .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    private var feedHeading: some View {
+        HStack {
+            Text(selectedFeed.sectionTitle)
+                .font(.title3.weight(.bold))
+                .foregroundStyle(OrbitTheme.primaryText)
+
+            Spacer()
+
+            Text("PREVIEW SOURCE")
+                .font(.system(size: 9, weight: .bold, design: .rounded))
+                .tracking(0.8)
+                .foregroundStyle(OrbitTheme.secondaryText)
+        }
+        .padding(.top, 2)
+    }
+
+    @ViewBuilder
+    private var feedContent: some View {
+        switch viewModel.state {
+        case .idle, .loading:
+            ProgressView("Loading feed…")
+                .tint(OrbitTheme.accent)
+                .foregroundStyle(OrbitTheme.secondaryText)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 36)
+
+        case .empty:
+            ContentUnavailableView(
+                "No posts yet",
+                systemImage: "text.bubble",
+                description: Text("This feed did not return any posts. Pull to refresh to try again.")
+            )
+            .padding(.top, 20)
+
+        case .failed(let message) where viewModel.posts.isEmpty:
+            ContentUnavailableView {
+                Label("Couldn't load feed", systemImage: "wifi.exclamationmark")
+            } description: {
+                Text(message)
+            } actions: {
+                Button("Try again") {
+                    Task { await viewModel.load() }
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(OrbitTheme.accent)
+            }
+            .padding(.top, 20)
+
+        case .loaded, .failed:
+            if case .failed(let message) = viewModel.state {
+                Label(message, systemImage: "exclamationmark.triangle")
+                    .font(.caption)
+                    .foregroundStyle(OrbitTheme.secondaryText)
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(OrbitTheme.surface, in: RoundedRectangle(cornerRadius: 12))
+            }
+
+            if visiblePosts.isEmpty {
+                ContentUnavailableView.search(text: searchText.isEmpty ? "these filters" : searchText)
+                    .padding(.top, 24)
+            } else {
+                LazyVStack(spacing: 12) {
+                    ForEach(visiblePosts) { post in
+                        NavigationLink {
+                            FeedPostDetailView(post: post)
+                        } label: {
+                            FeedPostCard(post: post)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
     }
 
     private var filterControls: some View {
@@ -186,4 +252,3 @@ struct FeedView: View {
         }
     }
 }
-
