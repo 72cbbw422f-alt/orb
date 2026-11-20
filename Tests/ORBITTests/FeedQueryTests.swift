@@ -25,10 +25,9 @@ final class FeedQueryTests: XCTestCase {
         XCTAssertTrue(result.allSatisfy { $0.kind == .image })
     }
 
-    func testSearchMatchesAuthorCaseInsensitivelyAndTrimsWhitespace() {
-        let expected = posts.filter { $0.author.localizedCaseInsensitiveContains("  ") }
-        let result = query(search: "  ").apply(to: posts)
-        XCTAssertEqual(result.map(\.id), expected.map(\.id))
+    func testWhitespaceOnlySearchBehavesLikeAnEmptyQuery() {
+        let result = query(search: "  \n\t ").apply(to: posts)
+        XCTAssertEqual(result.map(\.id), posts.map(\.id))
     }
 
     func testSearchMatchesTitleCommunityAuthorAndExcerpt() {
