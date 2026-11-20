@@ -93,3 +93,7 @@ GitHub Actions macOS runners can compile and test the iOS project. A successful 
 
 ## Feed query boundary
 Feed scope selection, local search, post-type filtering, and deterministic sorting are implemented as the pure `FeedQuery` value in `Core/Models/FeedQuery.swift`. SwiftUI owns only the current selection state; it passes that state to the query and renders the returned posts. This keeps fixture-backed behavior testable without introducing network dependencies. When live repositories arrive, this query can remain the local presentation/query layer while server-side sorting and filtering are selected only for supported API capabilities.
+
+
+## HTTP transport boundary
+`Core/Networking/HTTPClient.swift` provides an injectable URLSession-backed JSON transport. It accepts a prepared URLRequest and decodes a typed Decodable response. `HTTPClientError` distinguishes transport failures, invalid responses, non-2xx HTTP statuses (including rate-limit responses such as 429), and decoding failures. The transport does not own credentials, Reddit-specific endpoints, retry policy, or OAuth; those responsibilities remain in dedicated API/authentication layers.
