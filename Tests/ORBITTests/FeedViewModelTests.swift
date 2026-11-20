@@ -72,6 +72,32 @@ final class FeedViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func testFailedRefreshPreservesExistingPostsAndCanRecover() async {
+        let original = FeedPreviewData.posts
+        let updated = Array(original.dropFirst())
+        let repository = QueueFeedRepository([
+            .success(original),
+            .failure(.unavailable),
+            .success(updated)
+        ])
+        let viewModel = FeedViewModel(repository: repository)
+
+        await viewModel.load()
+        await viewModel.refresh()
+
+        guard case .failed = viewModel.state else {
+            return XCTFail("Expected failed refresh state")
+        }
+        XCTAssertEqual(viewModel.posts, original)
+        XCTAssertFalse(viewModel.isRefreshing)
+
+        await viewModel.refresh()
+
+        XCTAssertEqual(viewModel.state, .loaded)
+        XCTAssertEqual(viewModel.posts, updated)
+    }
+
+    @MainActor
     func testQueryIsAppliedLocallyToRepositoryResults() async {
         let viewModel = FeedViewModel(repository: QueueFeedRepository([.success(FeedPreviewData.posts)]))
         await viewModel.load()
@@ -90,7 +116,7 @@ final class FeedViewModelTests: XCTestCase {
     }
 }
 
-private actor QueueFeedRepository: FeedRepository {
+private final class QueueFeedRepository: FeedRepository {
     private var results: [Result<[FeedPost], FeedTestError>]
 
     init(_ results: [Result<[FeedPost], FeedTestError>]) {
