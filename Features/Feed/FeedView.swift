@@ -71,6 +71,9 @@ struct FeedView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(OrbitTheme.secondaryText)
             TextField("Search posts, communities, authors", text: $searchText)
+                .accessibilityLabel("Search feed")
+                .accessibilityHint("Searches post titles, communities and excerpts.")
+                .submitLabel(.search)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
                 .foregroundStyle(OrbitTheme.primaryText)
@@ -197,7 +200,8 @@ struct FeedView: View {
                                     in: Capsule()
                                 )
                         }
-                        .buttonStyle(.plain)
+                         .buttonStyle(.plain)
+                        .accessibilityAddTraits(selectedKind == filter ? .isSelected : [])
                     }
                 }
             }
