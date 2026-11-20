@@ -98,6 +98,23 @@ final class FeedViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func testCancelledInitialLoadReturnsToIdleAndCanRetry() async {
+        let expected = FeedPreviewData.posts
+        let repository = QueueFeedRepository([
+            .failure(.cancelled),
+            .success(expected)
+        ])
+        let viewModel = FeedViewModel(repository: repository)
+
+        await viewModel.load()
+        XCTAssertEqual(viewModel.state, .idle)
+
+        await viewModel.loadIfNeeded()
+        XCTAssertEqual(viewModel.state, .loaded)
+        XCTAssertEqual(viewModel.posts, expected)
+    }
+
+    @MainActor
     func testQueryIsAppliedLocallyToRepositoryResults() async {
         let viewModel = FeedViewModel(repository: QueueFeedRepository([.success(FeedPreviewData.posts)]))
         await viewModel.load()
@@ -127,10 +144,18 @@ private final class QueueFeedRepository: FeedRepository {
         guard !results.isEmpty else {
             throw FeedTestError.unavailable
         }
-        return try results.removeFirst().get()
+        switch results.removeFirst() {
+        case .success(let posts):
+            return posts
+        case .failure(.cancelled):
+            throw CancellationError()
+        case .failure(let error):
+            throw error
+        }
     }
 }
 
 private enum FeedTestError: Error {
     case unavailable
+    case cancelled
 }
